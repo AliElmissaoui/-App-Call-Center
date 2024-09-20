@@ -1,0 +1,12 @@
+.hidden{
+    display:none
+}
+.dropify-wrapper{
+    border-radius: 0.5rem;
+}
+.form-switch .partner-status-toggle{
+    width: 3.5em;
+}
+.partner-status-toggle{
+    height: 1.55em;
+}

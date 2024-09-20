@@ -1,0 +1,94 @@
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">Tickets</a></li>
+        <li class="breadcrumb-item active">Add</li>
+    </ol>
+</nav>
+
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Add a new ticket</h2>
+        </div>
+    </div>
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-subtle-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-subtle-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="add" method="POST">
+               <div class="row gx-3">
+                <div class="col-12 col-sm-6 col-xl-6">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Call Code</h5>
+                        <select class="form-control mb-xl-3" name="callId" required>
+                            <option value="" disabled selected hidden >Select Call Code</option>
+                            <% calls.forEach(function(call) { %>
+                                <option value="<%= call._id %>"><%= call.callCode %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-6">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Subject</h5>
+                        <input class="form-control mb-xl-3"
+                            type="text" placeholder="subject" name="subject" required />
+                    </div>
+                </div>
+                    <div class="col-12">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Problem Description</h5>
+                            <textarea class="form-control" placeholder="Describe the problem" name="problemDescription" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1">
+                            <h5 class="text-body-highlight mb-0">Status</h5>
+                        </div>
+                        <select class="form-control" name="status" required>
+                            <option value="" disabled selected>Select status</option>
+                            <% statusOptions.forEach(status => { %>
+                                <option value="<%= status %>"><%= status.charAt(0).toUpperCase() + status.slice(1) %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-6">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Priority</h5>
+                            <select class="form-control" name="priority" required>
+                                <option value="" disabled selected hidden >Select priority</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 gy-6">
+                        <div class="row g-3 justify-content-end">
+                            <div class="col-auto"><a class="btn btn-secondary px-5" onclick="window.location.href = '/tickets';" role="button">Cancel</a></div>
+                            <div class="col-auto"><button class="btn btn-primary px-5 px-sm-15">Create Ticket</button></div>
+                        </div>
+                    </div>
+               </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,41 @@
+<nav class="mb-2" aria-label="breadcrumb"></nav>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">Agents</a></li>
+        <li class="breadcrumb-item active">View</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Agents details</h2>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card h-100">
+            <div class="card-body pb-3">
+                <div class="row gx-3">
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-receipt"> </span>
+                            <h5 class="text-body-highlight mb-0">Name</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= agent.name %></p>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-envelope-alt"> </span>
+                            <h5 class="text-body-highlight mb-0">Email</h5>
+                        </div>
+                        <a href="#!"><%= agent.email %></a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-phone"> </span>
+                            <h5 class="text-body-highlight mb-0">Phone</h5>
+                        </div>
+                        <a class="text-body-secondary" href="#!"><%= agent.phone %></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

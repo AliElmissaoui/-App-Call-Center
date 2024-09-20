@@ -1,0 +1,69 @@
+<nav class="mb-2" aria-label="breadcrumb"></nav>
+<ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="#!">Calls</a></li>
+    <li class="breadcrumb-item active">Add</li>
+</ol>
+
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Add a new call</h2>
+        </div>
+    </div>
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-subtle-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-subtle-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    <% } %>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="add" method="POST">
+               <div class="row gx-3">
+                    <div class="col-12 col-sm-12 col-xl-12">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Caller Name</h5>
+                            <input class="form-control mb-xl-3" type="text" placeholder="Caller Name" name="callerName" required />
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-xl-6">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Date</h5>
+                            <input class="form-control mb-xl-3" type="date" name="date" required />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-6">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Duration</h5>
+                            <input class="form-control mb-xl-3" type="text" placeholder="Duration (e.g., 30 min)" name="duration" required />
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="mb-4">
+                            <h5 class="mb-2 text-body-highlight">Subject</h5>
+                            <textarea class="form-control" placeholder="Subject" name="subject" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-12 gy-6">
+                        <div class="row g-3 justify-content-end">
+                            <div class="col-auto"><a class="btn btn-secondary px-5" onclick="window.location.href = '/calls';" role="button">Cancel</a></div>
+                            <div class="col-auto"><button class="btn btn-primary px-5 px-sm-15">Create Call</button></div>
+                        </div>
+                    </div>
+               </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+
+<script>
+    var phoenixIsRTL = window.config.config.phoenixIsRTL;
+    if (phoenixIsRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+    }
+    
+    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+    var navbarTop = document.querySelector('.navbar-top');
+    if (navbarTopStyle === 'darker') {
+        navbarTop.setAttribute('data-navbar-appearance', 'darker');
+    }
+
+    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+    var navbarVertical = document.querySelector('.navbar-vertical');
+    if (navbarVerticalStyle === 'darker') {
+        navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+    }
+</script>
+
+<script src="../../../vendors/popper/popper.min.js"></script>
+<script src="../../../vendors/bootstrap/bootstrap.min.js"></script>
+<script src="../../../vendors/anchorjs/anchor.min.js"></script>
+<script src="../../../vendors/is/is.min.js"></script>
+<script src="../../../vendors/fontawesome/all.min.js"></script>
+<script src="../../../assets/js/sweet-alert/sweetalert2.min.js"></script>
+<script src="../../../vendors/lodash/lodash.min.js"></script>
+<script src="../../../vendors/swiper/swiper-bundle.min.js"></script>
+<script src="../../../vendors/dropzone/dropzone.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+<script src="../../../vendors/feather-icons/feather.min.js"></script>
+<script src="../../../vendors/dayjs/dayjs.min.js"></script>
+<script src="../../../assets/js/phoenix.js"></script>
+<script src="../../../vendors/echarts/echarts.min.js"></script>
+<script src="../../../assets/js/ecommerce-dashboard.js"></script>
+<script src="../../../vendors/dropify/dist/js/dropify.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        // Basic
+        $('.dropify').dropify();
+        // Translated
+        $('.dropify-fr').dropify({
+            messages: {
+                default: 'Glissez-déposez un fichier ici ou cliquez',
+                replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                remove:  'Supprimer',
+                error:   'Désolé, le fichier trop volumineux'
+            }
+        });
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+        drEvent.on('dropify.beforeClear', function(event, element){
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+        drEvent.on('dropify.afterClear', function(event, element){
+            alert('File deleted');
+        });
+        drEvent.on('dropify.errors', function(event, element){
+            console.log('Has Errors');
+        });
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e){
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
+    });
+
+    // --------- SEARCH ( FILTER THE TABLE ROWS ) --------------
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            // Get the input element and table
+            const table = document.getElementById('products-table-body');
+            const rows = table.getElementsByTagName('tr');
+
+            // Add event listener for keyup on search input
+            searchInput.addEventListener('keyup', function() {
+            const searchText = searchInput.value.toLowerCase();
+
+            // Loop through all table rows, and hide those that don't match the search query
+            for (let i = 0; i < rows.length; i++) { // start from 1 to skip header row
+                let shouldHide = true;
+                const cells = rows[i].getElementsByTagName('td');
+                
+                // Loop through all table cells in the row
+                for (let j = 0; j < cells.length; j++) {
+                    const cellText = cells[j].textContent.toLowerCase();
+                    if (cellText.includes(searchText)) {
+                        shouldHide = false;
+                        break;
+                    }
+                }
+
+                // Toggle row visibility based on the search query
+                rows[i].style.display = shouldHide ? 'none' : '';
+            }
+        });
+        }
+    });
+
+    // ------------------ END SEARCH ------------------------
+</script> 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html data-navigation-type="default" data-navbar-horizontal-shape="default" lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>AZF</title>
+    
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+   
+    <link rel="shortcut icon" type="image/x-icon"
+        href="../../../assets/img/azfshop.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="../../../vendors/simplebar/simplebar.min.js" type="text/javascript"></script>
+    <script src="../../../assets/js/config.js" type="text/javascript"></script>
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    
+    <%- include('partials/stylesheet.ejs') %>
+    
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        
+        <%- include('partials/sidebar.ejs') %>
+       
+        <%- include('partials/navbar.ejs') %>
+        
+
+        <div class="content">
+
+            <%- body %>
+            
+            <%- include('partials/footer.ejs') %>
+
+        </div>
+
+    </main><!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('partials/script.ejs') %>
+
+</body>
+
+</html>

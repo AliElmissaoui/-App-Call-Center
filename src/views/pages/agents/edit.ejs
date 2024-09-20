@@ -1,0 +1,64 @@
+<nav class="mb-2" aria-label="breadcrumb"></nav>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">Agents</a></li>
+        <li class="breadcrumb-item active">Add</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Add a new agent</h2>
+        </div>
+    </div>
+    
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-subtle-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-subtle-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    <% } %>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="<%= agent._id %>?_method=PUT" method="POST">
+               <div class="row gx-3">
+                <div class="col-12 col-sm-6 col-xl-6">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Name</h5>
+                        <input class="form-control mb-xl-3"
+                            type="text" placeholder="name" value="<%= agent.name %>" name="name" required />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-6">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Phone</h5>
+                        <input class="form-control mb-xl-3"
+                            type="text" placeholder="Phone"  value="<%= agent.phone %>" name="phone" required />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-6">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Email</h5>
+                        <input class="form-control mb-xl-3"
+                            type="email" placeholder="Email" value="<%= agent.email %>" name="email" required />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-12 gy-6">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-auto"><a class="btn btn-phoenix-primary px-5" onclick="window.location.href = '/agents';" role="button">Cancel</a></div>
+                        <div class="col-auto"><button class="btn btn-primary px-5 px-sm-15">Update agent</button>
+                        </div>
+                    </div>
+                </div>
+               </div>
+            </form>
+        </div>
+    </div>
+</div>

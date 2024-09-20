@@ -1,0 +1,72 @@
+<nav class="mb-2" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">Calls</a></li>
+        <li class="breadcrumb-item active">View</li>
+    </ol>
+</nav>
+
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Call Details</h2>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card h-100">
+            <div class="card-body pb-3">
+                <div class="row gx-3">
+
+                    <!-- Caller Name -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-receipt"> </span>
+                            <h5 class="text-body-highlight mb-0">Caller Name</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.callerName %></p>
+                    </div>
+
+                    <!-- Agent Name -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-user"> </span>
+                            <h5 class="text-body-highlight mb-0">Agent Name</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.agentId.name %> (<%= call.agentId.email %>)</p>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-calendar-alt"> </span>
+                            <h5 class="text-body-highlight mb-0">Date</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.date.toLocaleDateString() %></p>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-clock"> </span>
+                            <h5 class="text-body-highlight mb-0">Duration</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.duration %> minutes</p>
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-file-alt"> </span>
+                            <h5 class="text-body-highlight mb-0">Subject</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.subject %></p>
+                    </div>
+
+                    <!-- Call Code -->
+                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                        <div class="d-flex align-items-center mb-1"><span class="me-2 " data-feather="code"> </span>
+                            <h5 class="text-body-highlight mb-0">Call Code</h5>
+                        </div>
+                        <p class="text-body-secondary"><%= call.callCode %></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

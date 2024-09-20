@@ -1,0 +1,83 @@
+<nav class="mb-2" aria-label="breadcrumb"></nav>
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#!">Profile</a></li>
+        <li class="breadcrumb-item active">My account</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">Account details</h2>
+        </div>
+    </div>
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-subtle-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-subtle-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    <% } %>
+    <div class="card mb-3">
+        <div class="card-body">
+            <form action="profile/edit" method="POST" id="profileForm">
+               <div class="row gx-3">
+                
+                <div class="col-12 col-sm-6 col-xl-12">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-xl-6">
+                            <div class="mb-4">
+                                <h5 class="mb-2 text-body-highlight"> Name</h5>
+                                <input class="form-control mb-xl-3"
+                                    type="text" placeholder="firstName" name="name" value="<%= user.name %>" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-6">
+                            <div class="mb-4">
+                                <h5 class="mb-2 text-body-highlight">phone</h5>
+                                <input class="form-control mb-xl-3"
+                                    type="text" placeholder="lastName" name="phone" value="<%= user.phone %>" />
+                            </div>
+                        </div>
+                        <% if (user && user.function === 'supervisor') { %>
+                        <div class="col-12 col-sm-6 col-xl-12">
+                            <div class="mb-4">
+                                <h5 class="mb-2 text-body-highlight">Email</h5><input class="form-control mb-xl-3"
+                                    type="email" placeholder="email" name="email" value="<%= user.email %>" />
+                            </div>
+                        </div>
+                        <% } %>
+                        <div class="col-12 col-sm-6 col-xl-6">
+                            <div class="mb-4">
+                                <h5 class="mb-2 text-body-highlight">Password</h5>
+                                <input class="form-control mb-xl-3"
+                                    type="password" placeholder="password" name="password"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-6">
+                            <div class="mb-4">
+                                <h5 class="mb-2 text-body-highlight">Password Confirmation</h5>
+                                <input class="form-control mb-xl-3"
+                                    type="password" placeholder="confirmation" name="passwordconfirmation"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-12 gy-6">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-auto">
+                            <button  class="btn btn-warning px-5 px-sm-15 " id="editButton">Edit profile</button>
+                        </div>
+                    </div>
+                </div>
+               </div>
+            </form>
+        </div>
+    </div>
+</div>
+
