@@ -31,12 +31,10 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Call passport configuration
 configurePassport(passport);
 
 app.use((req, res, next) => {
-    res.locals.user = req.user || null; // Pass req.user to all views
+    res.locals.user = req.user || null; 
     next();
 });
 // Routes

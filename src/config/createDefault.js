@@ -8,7 +8,7 @@ const defaultUser = {
     name: 'supervisor',
     email: 'supervisor@gmail.com',
     phone: '1234567890',
-    password: '123456789', 
+    password: 'supervisor123', 
     function: 'supervisor' 
 };
 
