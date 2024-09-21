@@ -25,7 +25,10 @@ const getAllCalls = async (req, res) => {
 
 const addCall = async (req, res) => {
     try {
-       
+        if (req.user.function !== 'agent') { 
+            return res.redirect('/calls');
+        }
+        console.log(req.user.function);
         const agents = await User.find({ function: 'agent' });
         res.render('pages/calls/add', {
             currentPage: "calls",
@@ -69,6 +72,9 @@ const storeCall = async (req, res) => {
 
 const editCall = async (req, res) => {
     try {
+        if (req.user.function !== 'agent') { 
+            return res.redirect('/calls');
+        }
         const call = await Call.findById(req.params.id);
         if (!call) {
             return res.status(404).json({ message: 'Call not found' });

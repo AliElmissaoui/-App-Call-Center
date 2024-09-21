@@ -1,4 +1,5 @@
 const { check, validationResult } = require('express-validator');
+const Call = require('../models/Call'); 
 
 const validateInputTickets = [
     check('callId')
@@ -13,15 +14,12 @@ const validateInputTickets = [
     check('problemDescription')
         .notEmpty().withMessage('Problem Description is required')
         .isString().withMessage('Problem Description must be a string'),
-    check('subject')
-        .notEmpty().withMessage('Subject is required')
-        .isString().withMessage('Subject must be a string'),
     check('status')
         .optional()
         .isIn(['open', 'in-progress', 'resolved']).withMessage('Invalid status'),
     check('priority')
         .optional()
-        .isIn(['low', 'medium', 'high', 'Urgent']).withMessage('Invalid priority'),
+        .isIn(['low', 'medium', 'high', 'urgent']).withMessage('Invalid priority'),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -38,15 +36,12 @@ const validateEditTickets = [
     check('problemDescription')
         .notEmpty().withMessage('Problem Description is required')
         .isString().withMessage('Problem Description must be a string'),
-    check('subject')
-        .notEmpty().withMessage('Subject is required')
-        .isString().withMessage('Subject must be a string'),
     check('status')
         .notEmpty().withMessage('Status is required')
         .isIn(['open', 'in-progress', 'resolved']).withMessage('Invalid status'),
     check('priority')
         .notEmpty().withMessage('Priority is required')
-        .isIn(['low', 'medium', 'high', 'Urgent']).withMessage('Invalid priority'),
+        .isIn(['low', 'medium', 'high', 'urgent']).withMessage('Invalid priority'),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

@@ -22,59 +22,70 @@
                         <span class="fas fa-search search-box-icon"></span>
                     </form>
                 </div>
-                <a class="btn btn-primary" id="addBtn" href="/tickets/add">
+                <% if (user && user.function === 'agent') { %>
+                <a class="btn btn-primary " id="addBtn" href="/tickets/add">
                     <span class="fas fa-plus me-2"></span>Add Ticket
                 </a>
+                <% } %>
             </div>
         </div>
-
-        <div class="bg-body-emphasis border-top border-bottom border-translucent position-relative top-1">
-            <div class="col-12 col-xxl-6">
-                <div class="row g-3">
-
-                    <% tickets.forEach(ticket => { %>
-                        <div class="col-12 col-md-4">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h5 class="card-title">Ticket <%= ticket.ticketCode %></h5>
-                                    <p class="card-text">Subject: <%= ticket.subject %></p>
-                                    <p>Status: 
-                                        <span class="text-<%= 
-                                            ticket.status === 'open' ? 'success' : 
-                                            (ticket.status === 'in-progress' ? 'warning' : 
-                                            (ticket.status === 'resolved' ? 'primary' : 
-                                            'danger')) %>">
-                                            <%= ticket.status %>
-                                        </span>
-                                    </p>
-                                    
-                                    <p>Priority: 
-                                        <span class="text-<%= 
-                                            ticket.priority === 'low' ? 'success' : 
-                                            (ticket.priority === 'medium' ? 'warning' : 
-                                            (ticket.priority === 'high' ? 'orange' : 
-                                            'danger')) %>">
-                                            <%= ticket.priority %>
-                                        </span>
-                                    </p>
-                                    
-                                    <p class="text-muted">Created: <%= new Date(ticket.createdAt).toLocaleDateString() %></p>
-                                    
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <a href="/tickets/view/<%= ticket._id %>" class="btn btn-primary">View Details</a>
-                                        <% if (user && user.function === 'agent') { %>
-                                        <a href="/tickets/edit/<%= ticket._id %>" class="btn btn-secondary">edit</a>
-                                        <% } %>
-                                        <p class="mb-0">Comments: <span class="fw-bold"><%= ticket.comments.length %></span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
-
+        <% if (tickets.length === 0) { %>
+          <h5 class="text-center pt-6">No calls available</h5>
+      <% } %> 
+      <% if (tickets.length > 0) { %> 
+        <div class="row g-3 list" id="reportsList">
+          <% tickets.forEach(ticket => { %>
+            <div class="col-12 col-xl-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="border-bottom border-translucent">
+                    <div class="d-flex align-items-start mb-1">
+                      <div class="form-check mb-0"><input class="form-check-input" type="checkbox" /></div>
+                      <div class="d-sm-flex align-items-center ps-2"><a class="fw-bold fs-7 lh-sm title line-clamp-1 me-sm-4" href="">Ticket : <span class="text-body"><%= ticket.ticketCode %></span></a>
+                        <div class="d-flex align-items-center ps-4">
+                           <span class="ps-4">Status: </span> 
+                            <span class="fa-solid fa-circle me-1 <%= 
+                            ticket.status === 'open' ? 'text-danger' : 
+                            (ticket.status === 'in-progress' ? 'text-info' : 
+                            (ticket.status === 'resolved' ? 'text-success' : 
+                            'danger')) %>" data-fa-transform="shrink-6 up-1"></span><span class="fw-bold fs-9 text-body lh-2"> <%= ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1) %>
+                            </span></div>
+                        <div class="d-flex align-items-center ps-4">
+                            <span class="ps-4">Priority: </span> 
+                            <span class="fa-solid fa-circle me-1   <%=              
+                            ticket.priority === 'low' ? 'text-info' : 
+                            (ticket.priority === 'medium' ? 'text-success' : 
+                            (ticket.priority === 'high' ? 'text-warning' : 
+                            'text-danger')) %>"
+                             data-fa-transform="shrink-6 up-1"></span><span class="fw-bold fs-9 text-body lh-2"><%= ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1) %>
+                            </span></div>
+                      </div>
+                    </div>
+                    <p class="fs-9 fw-semibold text-body ms-4 text mb-4 ps-2"><span class="me-2"  style="stroke-width:2;">Subject :</span><%= ticket.callId.subject %></p>
+                  </div>
+                  <div class="row g-1 g-sm-3 mt-2 lh-1">
+                    <div class="col-12 col-sm-auto flex-1 text-truncate"><a class="fw-semibold fs-9" href="/tickets/view/<%= ticket._id %>"><span data-feather="info" class="me-2 reportsby"></span>View details</a></div>
+                    <% if (user && user.function === 'agent') { %>
+                    <div class="col-12 col-sm-auto flex-1 text-truncate"><a class="fw-semibold fs-9" href="/tickets/edit/<%= ticket._id %>"><span data-feather="edit" class="me-2 reportsby"></span>Edit</a></div>
+                    <% } %>
+                    <div class="col-12 col-sm-auto">
+                      <div class="d-flex align-items-center"><span class="me-2" data-feather="message-circle" style="stroke-width:2;"></span>
+                        <p class="mb-0 fs-9 fw-semibold text-body-tertiary reports">Comments: <span class="fw-bold"><%= ticket.comments.length %></span></p>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-auto">
+                      <div class="d-flex align-items-center"><span class="me-2" data-feather="clock" style="stroke-width:2;"></span>
+                        <p class="mb-0 fs-9 fw-semibold text-body-tertiary date"><%= new Date(ticket.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          <% }) %>
+            
         </div>
+        <% } %> 
     </div>
 </div>
 

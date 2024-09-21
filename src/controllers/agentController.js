@@ -13,12 +13,11 @@ const hashPassword = async (password) => {
 };
 
 
-const comparePassword = async (plainTextPassword, hashedPassword) => {
-    return await bcrypt.compare(plainTextPassword, hashedPassword);
-};
-
 const getAllAgents = async (req, res) => {
     try {
+        if (req.user.function !== 'supervisor') { 
+            return res.redirect('/');
+        }
         const agents = await User.find({ function: 'agent' });
         res.render('pages/agents/index', {
             currentPage: "agents",
@@ -33,6 +32,9 @@ const getAllAgents = async (req, res) => {
 };
 const addAgent = async (req, res) => {
     try {
+        if (req.user.function !== 'supervisor') { 
+            return res.redirect('/');
+        }
         res.render('pages/agents/add', {
             currentPage: "agents",
             success: req.flash('success'), 
@@ -64,6 +66,9 @@ const storeAgents = async (req, res) => {
 };
 const editAgent = async (req, res) => {
     try {
+        if (req.user.function !== 'supervisor') { 
+            return res.redirect('/');
+        }
         const agent = await User.findOne({ _id: req.params.id, function: 'agent' });
         if (!agent) {
             return res.status(404).json({ message: 'Agent not found' });
