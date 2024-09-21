@@ -83,7 +83,6 @@ router.route('/tickets/edit/:id')
     
 router.get('/tickets/view/:id', ticketController.viewTicket); 
 router.post('/tickets/:id/comment', ticketController.addComment); 
-router.post('/tickets/:id/comment', ticketController.addComment); 
 router.post('/tickets/:id/update-status', ticketController.updateTicketStatus);
 // ----------end Tickets-------------------
 
