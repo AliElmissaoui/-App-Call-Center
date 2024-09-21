@@ -41,11 +41,27 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-12 col-sm-6 col-xl-6 mb-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <h5 class="text-body-highlight mb-0">Status</h5>
+                    </div>
+                    <select class="form-control" name="status" required>
+                        <option value="" disabled selected>Select status</option>
+                        <% statusOptions.forEach(status => { %>
+                            <option value="<%= status %>"><%= status.charAt(0).toUpperCase() + status.slice(1) %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
                 <div class="col-12 col-sm-6 col-xl-6">
                     <div class="mb-4">
-                        <h5 class="mb-2 text-body-highlight">Subject</h5>
-                        <input class="form-control mb-xl-3"
-                            type="text" placeholder="subject" name="subject" required />
+                        <h5 class="mb-2 text-body-highlight">Priority</h5>
+                        <select class="form-control" name="priority" required>
+                            <option value="" disabled selected hidden >Select priority</option>
+                            <% priorityOptions.forEach(priority => { %>
+                                <option value="<%= priority %>"><%= priority.charAt(0).toUpperCase() + priority.slice(1) %></option>
+                            <% }) %>
+                        </select>
                     </div>
                 </div>
                     <div class="col-12">
@@ -55,30 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-xl-6 mb-4">
-                        <div class="d-flex align-items-center mb-1">
-                            <h5 class="text-body-highlight mb-0">Status</h5>
-                        </div>
-                        <select class="form-control" name="status" required>
-                            <option value="" disabled selected>Select status</option>
-                            <% statusOptions.forEach(status => { %>
-                                <option value="<%= status %>"><%= status.charAt(0).toUpperCase() + status.slice(1) %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-xl-6">
-                        <div class="mb-4">
-                            <h5 class="mb-2 text-body-highlight">Priority</h5>
-                            <select class="form-control" name="priority" required>
-                                <option value="" disabled selected hidden >Select priority</option>
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
-                                <option value="urgent">Urgent</option>
-                            </select>
-                        </div>
-                    </div>
+                    
 
                     <div class="col-12 gy-6">
                         <div class="row g-3 justify-content-end">

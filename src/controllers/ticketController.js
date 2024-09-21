@@ -4,19 +4,14 @@ const Ticket = require('../models/Ticket');
 const Comment = require('../models/Comment');
 const { sendMail } = require('../config/mailer');
 
-
 const getAllTickets = async (req, res) => {
     try {
-        let tickets;
-        
-        if (req.user.function === 'supervisor') {
-             tickets = await Ticket.find(); 
-        } else if (req.user.function === 'agent') {
-            tickets = await Ticket.find({ agentId: req.user._id });
-        }
+        const tickets = req.user.function === 'supervisor' 
+            ? await Ticket.find().populate('callId') 
+            : await Ticket.find({ agentId: req.user._id }).populate('callId');
         
         res.render('pages/tickets/index', {
-            tickets: tickets,
+            tickets,
             success: req.flash('success'),
             error: req.flash('error')
         });
@@ -28,15 +23,17 @@ const getAllTickets = async (req, res) => {
 
 const addTicket = async (req, res) => {
     try {
-       
-        const calls = await Call.find(); 
+        if (req.user.function !== 'agent') return res.redirect('/tickets');
+        
+        const calls = await Call.find({ agentId: req.user._id });
 
         res.render('pages/tickets/add', {
             currentPage: "tickets",
-            calls: calls, 
+            calls, 
             success: req.flash('success'),
             error: req.flash('error'),
-            statusOptions: ['open', 'in-progress', 'resolved']
+            statusOptions: ['open', 'in-progress', 'resolved'],
+            priorityOptions: ['low', 'medium', 'high', 'urgent']
         });
     } catch (error) {
         console.error('Error rendering add ticket page:', error);
@@ -46,98 +43,95 @@ const addTicket = async (req, res) => {
 
 const storeTicket = async (req, res) => {
     try {
-        const agentId = req.user._id; 
-        const agent = req.user; 
         const newTicketCode = await generateNewTicketCode();
         const newTicket = new Ticket({
-            callId: req.body.callId,       
-            agentId: agentId,    
+            callId: req.body.callId,
+            agentId: req.user._id,
             problemDescription: req.body.problemDescription,
             status: req.body.status,
             priority: req.body.priority,
-            ticketCode:newTicketCode,
-            subject:req.body.subject,
+            ticketCode: newTicketCode,
         });
+
         await newTicket.save();
+
         const supervisor = await User.findOne({ function: 'supervisor' });
         if (!supervisor) {
             req.flash('error', 'No supervisor found to send the notification.');
             return res.redirect('/tickets');
         }
 
-        await sendTicketNotifications(supervisor, agent, newTicket);
+        await sendTicketNotifications(supervisor, req.user, newTicket);
         req.flash('success', 'The ticket has been successfully added');
-        res.redirect('/tickets'); 
+        res.redirect('/tickets');
     } catch (error) {
-        req.flash('error', 'Error adding ticket');
         console.error('Error storing the ticket:', error);
+        req.flash('error', 'Error adding ticket');
         res.redirect('back');
     }
 };
 
 const editTicket = async (req, res) => {
     try {
+        if (req.user.function !== 'agent') return res.redirect('/tickets');
+
         const ticket = await Ticket.findById(req.params.id);
-        const calls = await Call.find();  
+        const calls = await Call.find({ agentId: req.user._id });
+
         if (!ticket) {
             req.flash('error', 'Ticket not found');
             return res.redirect('/tickets');
         }
-        res.render('pages/tickets/edit', { 
-            currentPage: "tickets", 
-            ticket: ticket, 
-            calls: calls,  
-            success: req.flash('success'), 
-            error: req.flash('error') 
+
+        res.render('pages/tickets/edit', {
+            currentPage: "tickets",
+            ticket,
+            calls,
+            success: req.flash('success'),
+            error: req.flash('error')
         });
-    } catch (err) {
-        req.flash('error', 'An error occurred while fetching the ticket');
+    } catch (error) {
+        req.flash('error', 'Error fetching ticket');
         res.redirect('/tickets');
     }
 };
 
-
-
 const updateTicket = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { problemDescription, subject, priority, callId } = req.body;
+        const ticket = await Ticket.findById(req.params.id);
 
-        const ticket = await Ticket.findById(id);
         if (!ticket) {
             req.flash('error', 'Ticket not found');
             return res.redirect('/tickets');
         }
-        ticket.problemDescription = problemDescription;
-        ticket.subject = subject;
-        ticket.priority = priority;
-        ticket.callId = callId;  
+
+        ticket.problemDescription = req.body.problemDescription;
+        ticket.priority = req.body.priority;
+        ticket.callId = req.body.callId;
         ticket.updatedAt = Date.now();
-        
+
         await ticket.save();
 
         req.flash('success', 'The ticket details have been successfully updated');
         res.redirect('/tickets');
-    } catch (err) {
-        req.flash('error', `Error updating ticket: ${err.message}`);
+    } catch (error) {
+        req.flash('error', 'Error updating ticket');
         res.redirect('back');
     }
 };
 
 const viewTicket = async (req, res) => {
     try {
-        const ticketId = req.params.id; 
-        const ticket = await Ticket.findById(ticketId).populate({
-            path: 'comments',
-            populate: {
-                path: 'commenterId',
-                select: 'name' 
-            }
-        });
-        
-        if (!ticket) {
-            return res.status(404).send('Ticket not found');
-        }
+        const ticket = await Ticket.findById(req.params.id)
+            .populate({
+                path: 'comments',
+                populate: { path: 'commenterId', select: 'name' }
+            })
+            .populate('callId')
+            .populate('agentId');
+
+        if (!ticket) return res.status(404).send('Ticket not found');
+
         res.render('pages/tickets/view', {
             ticket,
             success: req.flash('success'),
@@ -151,19 +145,13 @@ const viewTicket = async (req, res) => {
 
 const addComment = async (req, res) => {
     try {
-        const ticketId = req.params.id;
-        const { commentText } = req.body;
-
-        const ticket = await Ticket.findById(ticketId);
-
-        if (!ticket) {
-            return res.status(404).send('Ticket not found');
-        }
+        const ticket = await Ticket.findById(req.params.id);
+        if (!ticket) return res.status(404).send('Ticket not found');
 
         const newComment = new Comment({
             ticketId: ticket._id,
-            commenterId: req.user._id, 
-            commentText
+            commenterId: req.user._id,
+            commentText: req.body.commentText
         });
 
         await newComment.save();
@@ -171,7 +159,7 @@ const addComment = async (req, res) => {
         await ticket.save();
 
         req.flash('success', 'Comment added successfully');
-        res.redirect(`/tickets/view/${ticketId}`);
+        res.redirect(`/tickets/view/${ticket._id}`);
     } catch (error) {
         console.error('Error adding comment:', error);
         req.flash('error', 'Error adding comment');
@@ -185,59 +173,66 @@ const updateTicketStatus = async (req, res) => {
         if (!ticket) {
             return res.status(404).json({ success: false, message: 'Ticket not found' });
         }
+
         const oldStatus = ticket.status;
         const newStatus = req.body.status;
         ticket.status = newStatus;
         await ticket.save();
-        const user = req.user;
-        const userFunction = user.function;
+
+        const ticketDetails = `
+            Ticket Code: ${ticket.ticketCode}
+            Old Status :  ${ oldStatus}
+            Status: ${ticket.status}
+            Priority: ${ticket.priority}
+            
+        `;
+
         const agent = await User.findById(ticket.agentId);
-        if (!agent) {
-            req.flash('error', 'Agent not found.');
+        const supervisor = await User.findOne({ function: 'supervisor' });
+
+        if (!agent || !supervisor) {
+            req.flash('error', 'Agent or Supervisor not found.');
             return res.redirect('/tickets');
         }
+
         if (oldStatus !== newStatus) {
-            const supervisor = await User.findOne({ function: 'supervisor' });
-            if (!supervisor) {
-                req.flash('error', 'Supervisor not found.');
-                return res.redirect('/tickets');
-            }
-            const ticketDetails = `Ticket Details:\n- Ticket Code: ${ticket.ticketCode}`;
-            if (userFunction === 'supervisor') {
+            if (req.user.function === 'supervisor') {
                 const supervisorEmailText = `
                     Hi ${supervisor.name},
 
-                    You have updated the status of the ticket assigned to Agent ${agent.name}.\n
+                    You have updated the status of the ticket assigned to Agent ${agent.name}.
                     ${ticketDetails}
                 `;
 
                 const agentEmailText = `
                     Hi ${agent.name},
 
-                    The status of your ticket (Code: ${ticket.ticketCode}) has been updated by Supervisor ${user.name}.\n
+                    The status of your ticket (Code: ${ticket.ticketCode}) has been updated by Supervisor ${req.user.name}.
                     ${ticketDetails}
                 `;
+
                 await sendMail(supervisor.email, `Ticket Status Updated: ${ticket.ticketCode}`, supervisorEmailText);
                 await sendMail(agent.email, `Ticket Status Updated: ${ticket.ticketCode}`, agentEmailText);
-            } else if (userFunction === 'agent') {
+            } else if (req.user.function === 'agent') {
                 const agentEmailText = `
                     Hi ${agent.name},
 
-                    You have updated the status of your ticket.\n
+                    You have updated the status of your ticket.
                     ${ticketDetails}
                 `;
 
                 const supervisorEmailText = `
                     Hi ${supervisor.name},
-                    The status of the ticket (Code: ${ticket.ticketCode}) assigned to Agent ${agent.name} has been updated by Agent ${user.name}.\n
+
+                    The status of the ticket (Code: ${ticket.ticketCode}) assigned to Agent ${agent.name} has been updated by Agent ${req.user.name}.
                     ${ticketDetails}
                 `;
+
                 await sendMail(agent.email, `Ticket Status Updated: ${ticket.ticketCode}`, agentEmailText);
                 await sendMail(supervisor.email, `Ticket Status Updated: ${ticket.ticketCode}`, supervisorEmailText);
             }
         }
 
-        // Respond with success message
         res.json({ success: true, message: 'Ticket status updated successfully' });
     } catch (error) {
         console.error('Error updating ticket status:', error);
@@ -253,28 +248,30 @@ const generateNewTicketCode = async () => {
     }
     return 'T-1';
 };
+
 const sendTicketNotifications = async (supervisor, agent, ticket) => {
+    const ticketDetails = `
+        Ticket Code: ${ticket.ticketCode}
+        Status: ${ticket.status}
+        Priority: ${ticket.priority}
+    `;
     const supervisorEmailText = `
         A new ticket has been created by Agent ${agent.name}.
-        
         Ticket Details:
-        - Ticket Code: ${ticket.ticketCode}
-
+        ${ticketDetails}
         Please follow up if necessary.
     `;
-    
     const agentEmailText = `
         Hi ${agent.name},
-
         Your ticket has been successfully created with the following details:
-
-        - Ticket Code: ${ticket.ticketCode}
-
+        ${ticketDetails}
         You will be notified once there is an update on your ticket. Thank you for your submission.
     `;
+
     await sendMail(supervisor.email, `New Ticket Created: ${ticket.ticketCode}`, supervisorEmailText);
     await sendMail(agent.email, `Ticket Created: ${ticket.ticketCode}`, agentEmailText);
 };
+
 module.exports = {
     getAllTickets,
     addTicket,
@@ -284,5 +281,4 @@ module.exports = {
     viewTicket,
     addComment,
     updateTicketStatus
-   
-   };
+};

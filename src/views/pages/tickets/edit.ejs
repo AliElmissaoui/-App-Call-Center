@@ -41,20 +41,6 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-xl-6">
-                    <div class="mb-4">
-                        <h5 class="mb-2 text-body-highlight">Problem Description</h5>
-                        <textarea class="form-control" placeholder="Problem Description" name="problemDescription" required><%= ticket.problemDescription %></textarea>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-6">
-                    <div class="mb-4">
-                        <h5 class="mb-2 text-body-highlight">Subject</h5>
-                        <input class="form-control mb-xl-3"
-                            type="text" placeholder="Subject" value="<%= ticket.subject %>" name="subject" required />
-                    </div>
-                </div>
-
                 <div class="col-12 col-sm-6 col-xl-6 mb-4">
                     <div class="d-flex align-items-center mb-1">
                         <h5 class="text-body-highlight mb-0">Status</h5>
@@ -73,10 +59,19 @@
                             <option value="low" <%= ticket.priority === 'low' ? 'selected' : '' %>>Low</option>
                             <option value="medium" <%= ticket.priority === 'medium' ? 'selected' : '' %>>Medium</option>
                             <option value="high" <%= ticket.priority === 'high' ? 'selected' : '' %>>High</option>
-                            <option value="Urgent" <%= ticket.priority === 'Urgent' ? 'selected' : '' %>>Urgent</option>
+                            <option value="urgent" <%= ticket.priority === 'urgent' ? 'selected' : '' %>>Urgent</option>
                         </select>
                     </div>
                 </div>
+                <div class="col-12 col-sm-12 col-xl-12">
+                    <div class="mb-4">
+                        <h5 class="mb-2 text-body-highlight">Problem Description</h5>
+                        <textarea class="form-control" placeholder="Problem Description" name="problemDescription" required><%= ticket.problemDescription %></textarea>
+                    </div>
+                </div>
+                
+
+              
                 <div class="col-12 col-sm-12 col-xl-12">
                     <div class="row g-3 justify-content-end">
                         <div class="col-auto"><a class="btn btn-phoenix-primary px-5" onclick="window.location.href = '/tickets';" role="button">Cancel</a></div>
