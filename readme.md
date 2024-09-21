@@ -82,6 +82,64 @@ To use Mailtrap:
 
 4. Once configured, emails sent from the app will be captured and displayed in your Mailtrap inbox.
 
+5. Project Screenshots
+
+### 1. **Login**  
+![Login](public/assets/img/imageProject/login.png)
+
+### 2. **Edit Account**  
+![Edit Account](public/assets/img/imageProject/editAcount.png)
+
+### 3. **Add Agent**  
+![Add Agent](public/assets/img/imageProject/addAgent.png)
+
+### 4. **All Agents**  
+![All Agents](public/assets/img/imageProject/allAgents.png)
+
+### 5. **View Agent**  
+![View Agent](public/assets/img/imageProject/detailsagents.png)
+
+### 6. **Add Call**  
+![Add Call](public/assets/img/imageProject/addCall.png)
+
+### 7. **View Call**  
+![View Call](public/assets/img/imageProject/viewCall.png)
+
+### 8. **Edit Call**  
+![Edit Call](public/assets/img/imageProject/editCall.png)
+
+### 9. **Add Ticket**  
+![Add Ticket](public/assets/img/imageProject/addTicket.png)
+
+### 10. **Edit Ticket**  
+![Edit Ticket](public/assets/img/imageProject/editTicket.png)
+
+### 11. **View Ticket**  
+![View Ticket](public/assets/img/imageProject/viewTicket.png)
+
+### 12. **All Tickets**  
+![All Tickets](public/assets/img/imageProject/allTicket.png)
+
+### 13. **All Tickets (Supervisor)**  
+![All Tickets (Supervisor)](public/assets/img/imageProject/allTicketSep.png)
+
+### 14. **Update Status**  
+![Update Status](public/assets/img/imageProject/updateStatus.png)
+
+### 15. **Mail - Agents**  
+![Mail - Agents](public/assets/img/imageProject/mail%20agents.png)
+
+### 16. **Mail - Supervisor**  
+![Mail - Supervisor](public/assets/img/imageProject/mailSep.png)
+
+### 17. **Mail - Update Status**  
+![Mail - Update Status](public/assets/img/imageProject/mailUpdateStatus.png)
+
+### 18. **Mail - Update Status (Supervisor)**  
+![Mail - Update Status (Supervisor)](public/assets/img/imageProject/mailupdatestatusSep.png)
+
+
+
 ### Built With
 
 - **Express.js** - Web framework for Node.js
