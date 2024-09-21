@@ -82,6 +82,8 @@ To use Mailtrap:
 
 4. Once configured, emails sent from the app will be captured and displayed in your Mailtrap inbox.
 
+5.
+![Project Screenshot](public/assets/img/imageProject/login.png)
 ### Built With
 
 - **Express.js** - Web framework for Node.js
